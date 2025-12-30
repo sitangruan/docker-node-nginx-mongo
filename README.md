@@ -8,10 +8,10 @@ To test in windows machine locally, make sure you meet the prerequisites:
  ## Run
 Method 1 - Deployment using docker compose
 
-(dev mode)
+(**dev mode**)
 In cmd window or terminal, run this command for dev mode
 
-docker compose --profile dev up -d --build
+**docker compose --profile dev up -d --build**
 
 Then you will see new images in the Images tab of docker desktop: 
   1. mongo
@@ -26,10 +26,11 @@ In the containers tab of docker desktop, you will see a new group "docker-node-n
 To test, in browser window try these two urls:
  
   http://localhost:8080/api/health
+
   http://localhost:8080/api/tasks
 
 *********************************************************************
- (prod mode)
+ (**prod mode**)
 In cmd window or terminal, run this command for prod mode
  
- docker compose --profile prod up -d --build 
+ **docker compose --profile prod up -d --build** 
