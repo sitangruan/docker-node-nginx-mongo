@@ -70,3 +70,9 @@ In cmd window or terminal, run this command for prod mode
   **http://localhost/nginx**
 
   You should be able to see the "Welcome to nginx" page.
+
+  To delete the previous deployment, run:
+
+  **kubectl delete deployment nginx-deployment**
+
+  here **"nginx-deployment"** is the deployment name defined in that yaml file.
