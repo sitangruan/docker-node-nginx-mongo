@@ -13,6 +13,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 30s
     networks: [appnet]
 
   app-dev:
@@ -31,6 +32,12 @@ services:
         condition: service_healthy
     ports:
       - "3000:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://app-dev:3000/api/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 25s
     profiles: ["dev"]
     networks: [appnet]
 
@@ -49,17 +56,18 @@ services:
     ports:
       - "3000:3000"
     healthcheck:
-      test: ["CMD-SHELL", "wget -q0- http://localhost:3000/health || exit 1"]
+      test: ["CMD-SHELL", "wget -qO- http://app:3000/api/health || exit 1"]
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 25s
     profiles: ["prod"]
     networks: [appnet]
 
   nginx:
     image: nginx:alpine
     depends_on:
-      app:
+      app-dev:
         condition: service_healthy
     ports:
       - "8080:80"

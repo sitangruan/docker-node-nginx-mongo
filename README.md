@@ -29,8 +29,28 @@ To test, in browser window try these two urls:
 
   http://localhost:8080/api/tasks
 
+To remove the running containers, run: 
+
+  **docker compose --profile dev down**
+
+The related images you need to delete separately.
+
+Note: the health check in app-dev or dev should use the service name ("app-dev" or "app") not localhost. It also could not use CMD and curl as they are not provided in alpine.
+You should yse "wget" instead.
+
+**test: ["CMD-SHELL", "wget -qO- http://app-dev:3000/api/health || exit 1"]**
+
 *********************************************************************
  (**prod mode**)
 In cmd window or terminal, run this command for prod mode
  
  **docker compose --profile prod up -d --build** 
+
+
+ ## Kubernetes
+ To support Kubernetes deployment, you should enable Kubernetes in your docker desktop and then apply and restart.
+ Then you should also install Nginx Ingress Controller, which is a must. Below are the commands:
+
+  **kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml**
+
+  **kubectl -n ingress-nginx rollout status deploy/ingress-nginx-controller**
