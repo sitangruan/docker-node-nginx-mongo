@@ -54,3 +54,19 @@ In cmd window or terminal, run this command for prod mode
   **kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml**
 
   **kubectl -n ingress-nginx rollout status deploy/ingress-nginx-controller**
+
+  In command window run:
+
+  **kubectl apply -f kubernetes-complete-deployment.yaml**
+
+  And then you can run below commands to verify if the deployment succeeds:
+
+  **kubectl get svc**
+  **kubectl get pods**
+  **kubectl get ingress**
+
+  If they show success, in browser url go to:
+
+  **http://localhost/nginx**
+
+  You should be able to see the "Welcome to nginx" page.
