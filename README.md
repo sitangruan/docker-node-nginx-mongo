@@ -46,8 +46,9 @@ In cmd window or terminal, run this command for prod mode
  
  **docker compose --profile prod up -d --build** 
 
-
+*********************************************************************
  ## Kubernetes
+ ## A basic kubernets example
  To support Kubernetes deployment, you should enable Kubernetes in your docker desktop and then apply and restart.
  Then you should also install Nginx Ingress Controller, which is a must. Below are the commands:
 
@@ -76,3 +77,23 @@ In cmd window or terminal, run this command for prod mode
   **kubectl delete deployment nginx-deployment**
 
   here **"nginx-deployment"** is the deployment name defined in that yaml file.
+
+*********************************************************************
+## Use kubernetes and ingress controller to deploy this project (mongo + node + nginx)
+Run this command:
+
+  **kubectl apply -f k8s-mongo-node-nginx-ingress.yaml**
+
+To test, in browser go these urls:
+
+  **http://localhost/**
+
+  **http://localhost/api/health**
+
+  **http://localhost/api/tasks**
+
+To delete the deployment in one shot, run this command:
+
+  **kubectl delete namespace mongo-node-nginx-app**
+
+The other file **k8s-mongo-node-nginx-ingress.yaml** is without ingress controller support and it is using NodePort to expose the Nginx service directly.
