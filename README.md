@@ -11,7 +11,7 @@ Method 1 - Deployment using docker compose
 (**dev mode**)
 In cmd window or terminal, run this command for dev mode
 
-**docker compose --profile dev up -d --build**
+**<span style="color: blue">docker compose --profile dev up -d --build</span>**
 
 Then you will see new images in the Images tab of docker desktop: 
   1. mongo
@@ -31,20 +31,20 @@ To test, in browser window try these two urls:
 
 To remove the running containers, run: 
 
-  **docker compose --profile dev down**
+  **<span style="color: blue">docker compose --profile dev down</span>**
 
 The related images you need to delete separately.
 
 Note: the health check in app-dev or dev should use the service name ("app-dev" or "app") not localhost. It also could not use CMD and curl as they are not provided in alpine.
 You should yse "wget" instead.
 
-**test: ["CMD-SHELL", "wget -qO- http://app-dev:3000/api/health || exit 1"]**
+**<span style="color: blue">test: ["CMD-SHELL", "wget -qO- http://app-dev:3000/api/health || exit 1"]</span>**
 
 *********************************************************************
  (**prod mode**)
 In cmd window or terminal, run this command for prod mode
  
- **docker compose --profile prod up -d --build** 
+ **<span style="color: blue">docker compose --profile prod up -d --build</span>** 
 
 *********************************************************************
  ## Kubernetes
@@ -52,13 +52,13 @@ In cmd window or terminal, run this command for prod mode
  To support Kubernetes deployment, you should enable Kubernetes in your docker desktop and then apply and restart.
  Then you should also install Nginx Ingress Controller, which is a must. Below are the commands:
 
-  **kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml**
+  **<span style="color: blue">kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml**
 
-  **kubectl -n ingress-nginx rollout status deploy/ingress-nginx-controller**
+  **<span style="color: blue">kubectl -n ingress-nginx rollout status deploy/ingress-nginx-controller**
 
   In command window run:
 
-  **kubectl apply -f kubernetes-complete-deployment.yaml**
+  **<span style="color: blue">kubectl apply -f kubernetes-complete-deployment.yaml</span>**
 
   And then you can run below commands to verify if the deployment succeeds:
 
@@ -74,7 +74,7 @@ In cmd window or terminal, run this command for prod mode
 
   To delete the previous deployment, run:
 
-  **kubectl delete deployment nginx-deployment**
+  **<span style="color: blue">kubectl delete deployment nginx-deployment**
 
   here **"nginx-deployment"** is the deployment name defined in that yaml file.
 
@@ -82,7 +82,7 @@ In cmd window or terminal, run this command for prod mode
 ## Use kubernetes and ingress controller to deploy this project (mongo + node + nginx)
 Run this command:
 
-  **kubectl apply -f k8s-mongo-node-nginx-ingress.yaml**
+  **<span style="color: blue">kubectl apply -f k8s-mongo-node-nginx-ingress.yaml</span>**
 
 To test, in browser go these urls:
 
@@ -94,6 +94,62 @@ To test, in browser go these urls:
 
 To delete the deployment in one shot, run this command:
 
-  **kubectl delete namespace mongo-node-nginx-app**
+  **<span style="color: blue">kubectl delete namespace mongo-node-nginx-app</span>**
 
-The other file **k8s-mongo-node-nginx-ingress.yaml** is without ingress controller support and it is using NodePort to expose the Nginx service directly.
+*********************************************************************
+The is another file **k8s-mongo-node-nginx.yaml** is without ingress controller support and it is using NodePort to expose the Nginx service directly.
+To use it, run this command:
+
+  **kubectl apply -f k8s-mongo-node-nginx.yaml**
+
+As it is using nginx as node port to expose the service, so the port number should included in the url, so the testing urls become:
+
+  **http://localhost:30080/**
+
+  **http://localhost:30080/api/health**
+
+  **http://localhost:30080/api/tasks**
+
+
+*******************************************************************
+## Some common commands used in this project
+
+  1. Deploy the ingress enabled services
+
+  **<span style="color: blue">kubectl apply -f k8s-mongo-node-nginx-ingress.yaml</span>**
+
+  2. Deploy the non ingress enabled services
+
+  **<span style="color: blue">kubectl apply -f k8s-mongo-node-nginx-ingress.yaml</span>**
+
+  3. Get all resources (pods, services, etc.) under the deployed namespace
+
+  **<span style="color: blue">kubectl get all -n mongo-node-nginx-app</span>**
+
+  4. Deploy the whole deployed namespace (all resources including pods and services will deleted).
+
+  **<span style="color: blue">kubectl delete namespace mongo-node-nginx-app</span>**
+
+  5. Downgrad the replica number. It is a must do if the deployment is not successfully deployed due to readiness probe or liveness probe error. You need to downgrade the number and then you can delete the related pod/service.
+
+  **<span style="color: blue">kubectl scale deploy node-app-deployment -n mongo-node-nginx-app --replicas=0</span>**
+
+  6. Same reason like above. Downgrade the replicas number so you can delete the related pod/service finally.
+
+  **<span style="color: blue">kubectl scale deploy nginx-deployment -n mongo-node-nginx-app --replicas=0</span>**
+
+  7. Delete the StatefullSet of the mongoDB.
+
+  **<span style="color: blue">kubectl delete sts mongo -n mongo-node-nginx-app</span>**
+
+  8. Delete the exposed node app service.
+
+  **<span style="color: blue">kubectl delete svc node-app-service -n mongo-node-nginx-app</span>**
+
+  9. Delete the exposed nginx service.
+
+  **<span style="color: blue">kubectl delete svc nginx-service -n mongo-node-nginx-app</span>**
+
+  10. Delete the exposed mongoDB service.
+
+  **<span style="color: blue">kubectl delete svc mongo -n mongo-node-nginx-app</span>**
