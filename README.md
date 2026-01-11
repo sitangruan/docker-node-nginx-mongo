@@ -112,7 +112,7 @@ As it is using nginx as node port to expose the service, so the port number shou
 
 
 *******************************************************************
-## Some common commands used in this project
+## Some common kubernetes commands used in this project
 
   1. Deploy the ingress enabled services
 
@@ -153,3 +153,62 @@ As it is using nginx as node port to expose the service, so the port number shou
   10. Delete the exposed mongoDB service.
 
   **<span style="color: blue">kubectl delete svc mongo -n mongo-node-nginx-app</span>**
+
+  11. Get logs of a deployed pod with filter condition
+
+  **<span style="color: blue">kubectl logs node-app-deployment-59695dffdc-rxstp -n mongo-node-nginx-app | findstr /i "mongo"</span>**
+
+  (note: "node-app-deployment-59695dffdc-rxstp" is the pod name, **findstr /i "mongo** is to find all logs with "mongo" where **/i** means case insensitive)
+
+
+  ***************************************************************
+  ## Support helm to deploy the project
+  
+  It also support using helm to deploy the pods. To be able to use helm in Windows machine, you may need to install package manager **Chocolatey** first. Then you can use it to install kubernetes-helm.
+
+  To practice helm for installation, first remove the whole namesapce you done before by the command **kubectl**.
+
+  **<span style="color: blue">kubectl delete namespace mongo-node-nginx-app</span>**
+
+  (note: "mongo-node-nginx-app" is the the namespace used, it is not something hard-coded, you can have your own)
+
+  Suppose helm is avaible now on your machine, to deploy with it, enter in to this project folder, run this command.
+
+    **<span style="color: blue">helm install my-todo-app ./my-fullstack-app -n mongo-node-nginx-app --create-namespace</span>**
+
+  To view the deployed pods, run this:
+  
+    **<span style="color: blue">kubectl get pods -n mongo-node-nginx-app</span>**
+
+  To view the deployed services, run this:
+
+    **<span style="color: blue">kubectl get svc -n mongo-node-nginx-app</span>**
+
+  To test, in browser go these urls, just like before:
+
+  **http://localhost/**
+
+  **http://localhost/api/health**
+
+  **http://localhost/api/tasks**
+
+  If you make some change, and you want to redploy, run this:
+  
+  **<span style="color: blue">helm upgrade --install my-node-app ./my-fullstack-app</span>**
+
+*******************************************************************
+## Some other helm commands could be used in this project
+
+1. Grammer scan
+**<span style="color: blue">helm lint ./my-fullstack-app</span>**
+
+2. Pre-run to check the rendered yaml content
+**<span style="color: blue">helm install --dry-run --debug my-test ./my-fullstack-app</span>**
+
+3. List all depoyments under this namespace
+**<span style="color: blue">helm list -n mongo-node-nginx-app</span>**
+
+4. Uninstall a deployment
+**<span style="color: blue">helm uninstall my-todo-app -n mongo-node-nginx-app</span>**
+
+(note: "my-todo-app" is the deployment name and "mongo-node-nginx-app" is the namespace name)

@@ -1,0 +1,23 @@
+# MongoDB 配置
+mongo:
+  image: mongo:7
+  rootUser: root
+  rootPassword: example
+  database: todo
+  storageSize: 1Gi
+  defaultMode: 0444
+
+# Node 应用配置
+node:
+  replicas: 2
+  port: 3000
+  image:
+    repository: "node-app"
+    tag: "latest"
+    pullPolicy: Never
+
+# Nginx 配置
+nginx:
+  replicas: 1
+  image: "nginx:alpine"
+  host: localhost

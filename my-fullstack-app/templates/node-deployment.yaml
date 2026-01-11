@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deployment
+spec:
+  replicas: {{ .Values.node.replicas }}
+  selector:
+    matchLabels:
+      app: node-app
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+      - name: node-app
+        image: {{ .Values.node.image.repository }}:{{ .Values.node.image.tag }}
+        imagePullPolicy: {{ .Values.node.image.pullPolicy | default "Never" }}
+        ports:
+          - containerPort: {{ .Values.node.port }}
+        env:
+          - name: NODE_ENV
+            value: "production"
+          - name: PORT
+            value: "{{ .Values.node.port }}"
+          - name: MONGO_URI
+            valueFrom:
+              secretKeyRef:
+                name: mongo-credentials
+                key: MONGO_URI
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port:  {{ .Values.node.port }}
+          initialDelaySeconds: 15
+          periodSeconds: 10
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port:  {{ .Values.node.port }}
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 5
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "256Mi"

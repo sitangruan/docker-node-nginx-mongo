@@ -17,12 +17,14 @@ app.use(morgan('dev'));
 app.use('/api/health', (req, res) => res.json({ status: 'OK', name: 'Sitang mongo api 1' }));
 app.use('/api/tasks', tasksRouter);
 
+
 // Connect to MongoDB and start server
+console.log('Before connecting to MongoDB');
 mongoose.connect(MONGO_URI)
   .then(() => {
     console.log('Connected to MongoDB');
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`Server is running on http://localhost:${PORT}`);
+      console.log(`In node app, the server is running on http://localhost:${PORT}`);
     });
   })
   .catch((error) => {
