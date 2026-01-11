@@ -200,15 +200,19 @@ As it is using nginx as node port to expose the service, so the port number shou
 ## Some other helm commands could be used in this project
 
 1. Grammer scan
+
 **<span style="color: blue">helm lint ./my-fullstack-app</span>**
 
 2. Pre-run to check the rendered yaml content
+
 **<span style="color: blue">helm install --dry-run --debug my-test ./my-fullstack-app</span>**
 
 3. List all depoyments under this namespace
+
 **<span style="color: blue">helm list -n mongo-node-nginx-app</span>**
 
 4. Uninstall a deployment
+
 **<span style="color: blue">helm uninstall my-todo-app -n mongo-node-nginx-app</span>**
 
 (note: "my-todo-app" is the deployment name and "mongo-node-nginx-app" is the namespace name)
